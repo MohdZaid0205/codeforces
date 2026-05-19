@@ -85,8 +85,8 @@
     }
     template <typename T> T vmin(T a, T b) { return std::min(a, b); }
     template <typename T> T vmax(T a, T b) { return std::max(a, b); }
-    template <typename T, typename... Args> T vmin(T a, Args... args) { return std::min(a, vmin(args...)); }
-    template <typename T, typename... Args> T vmax(T a, Args... args) { return std::max(a, vmax(args...)); }
+    template <typename T, typename... Args> T vmin(T a, Args... args) { return min(a, vmin(args...)); }
+    template <typename T, typename... Args> T vmax(T a, Args... args) { return max(a, vmax(args...)); }
     template <typename T> std::vector<T> getFactors(T n) {
         static_assert(std::is_integral<T>::value, "Template type must be an integral type.");
         std::vector<T> factors;
@@ -260,8 +260,65 @@ int main() {
 long long int n;
 std::cin >> n;
 
-std::vector<long long int> arr = std::vector<long long int>(n);
-for (long long int i = 0; i < n; i++){ std::cin >> arr[i]; }
+std::vector<long long int> arr = std::vector<long long int>(2*n, 0);
+for (long long int i = 0; i < 2*n; i++){ 
+    long long int x;
+    std::cin >> x;
+    arr[x - 1] ++;
+}
+
+long long int e = 0;
+long long int eV = 0;
+long long int o = 0;
+long long int oV = 0;
+bool norm = false;
+for (long long int i = 0; i < 2*n; i++)
+{
+    if (arr[i] == 0)
+        continue;
+    if (arr[i]%2 == 0){
+        e += 1;
+        eV += arr[i];
+    } else {
+        o += 1;
+        oV += arr[i];
+    }
+}
+
+long long int r = 0;
+// if (n%2 == 0){
+//     if (e%2 == 0){
+//         r = o + 2*e;
+//     } else {
+//         if (((eV + 1)/2)%2 == 0){
+//             r = o + vmax(0LL, 2*(e-1));
+//         } else {
+//             r = o + 2*e;
+//         }
+//     }
+// } else {
+//     if (e%2 == 0){
+//         if (((eV + 1)/2)%2 != 0){
+//             r = o + vmax(0LL, 2*(e-1));
+//         } else {
+//             r = o + 2*e;
+//         }
+//     } else {
+//         r = o + 2*e;
+//     }
+// }
+
+if (o > 0) {
+    r = o + 2 * e;
+} else {
+    if (e % 2 == n % 2) {
+        r = 2 * e;
+    } else {
+        r = 2 * (e - 1);
+    }
+}
+
+println(r);
 
 
 // ------------------------------------------------------------------+
