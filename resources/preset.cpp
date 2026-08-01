@@ -245,6 +245,10 @@ int main() {
 #pragma region  tests
     std::cin.tie(NULL);
 
+    // USACO Stuff
+    // freopen("bcount.in", "r", stdin);
+    // freopen("bcount.out", "w", stdout);
+
     int t = 1;
     std::cin >> t;
     while (t--) {
