@@ -261,50 +261,72 @@ int main() {
 //  THAT PENGUIN  |            | IS GOING PLACES  |   FUCK FOOBAR    |
 // ---------------+------------+------------------+------------------+
 
-long long int n;
-std::cin >> n;
+long long int n, k;
+std::cin >> n >> k;
 
-std::vector<std::pair<long long int, long long int>> arr;
+std::vector<long long int> arr;
 for (long long int i = 0; i < n; i++){
-    long long int X, Y;
-    std::cin >> X >> Y;
-    arr.push_back({X, Y});
+    long long int x;
+    std::cin >> x;
+    arr.push_back(x);
 }
 
-auto test = [arr, n](long long int s){
-    long long int l = 0;
-    long long int r = 0;
-    for (long long int i = 0; i < n; i++){
-        long long int ll = l - s;
-        long long int rr = r + s;
-        // println("S=", s, l, r, ll, rr, arr[i].first, arr[i].second);
-        l = vmax(ll, arr[i].first);
-        r = vmin(rr, arr[i].second);
-        // println("C =>", l, r);
-        if (l > r)
-            return false;
-    }
-    return true;
-};
+// TRYING without cases
 
-long long int l = 0;
-long long int h = 1e9;
+// long long int res = INT64_MAX;
+// long long int prv = INT32_MIN;
 
-while (l <= h) {
-    long long int m = (l + h)/2;
-    if (test(m)) {
-        h = m - 1;
-    } else {
-        l = m + 1;
-    }
-}
-
-// for (long long int i = 0; i < 20; i++){
-//     println(i, test(i));
+// for (auto v:arr){
+    //     res = std::min(res, std::abs(prv-v));
+    //     prv = v;
+    // }
+    
+    // for (long long int i = 0; i < k-1; i++){
+        //     auto it1 = arr.upper_bound(res);
+        //     auto it2 = std::prev(it1);
+        //     long long int tmp = res;
+    
+//     println("RES >>", res);
+//     if (it1 != arr.end())
+//         tmp = std::min(tmp, std::abs(*it1 - res));
+//     if (it2 != arr.end())
+//         tmp = std::min(tmp, std::abs(*it2 - res));
+//     println("TMP", tmp);
+//     arr.insert(res);
+//     res = tmp;
 // }
-// nline();
 
-println(l);
+std::sort(arr.begin(), arr.end());
+
+long long int res = arr[0];
+for (long long int i = 1; i < n; i++){
+    res = vmin(res, std::abs(arr[i] - arr[i-1]));
+}
+
+if (k == 1) {
+    println(res);
+}
+if (k == 2) {
+    long long int res = arr[0]; 
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            long long int d = std::abs(arr[i] - arr[j]);
+            res = std::min(res, d);
+
+            auto it = std::lower_bound(arr.begin(), arr.end(), d);
+        
+            if (it != arr.end())
+                res = std::min(res, *it - d);
+            if (it != arr.begin())
+                res = std::min(res, d - *std::prev(it));
+        }
+    }
+    println(res);
+}
+if (k >= 3) {
+    println(0);
+}
 
 // ------------------------------------------------------------------+
 //                                     ______                        |
